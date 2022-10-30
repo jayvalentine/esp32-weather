@@ -151,4 +151,14 @@ void app_main(void)
         .disable_auto_redirect = true,
     };
     esp_http_client_handle_t client = esp_http_client_init(&config);
+
+    esp_err_t err = esp_http_client_perform(client);
+    if (err == ESP_OK) {
+        ESP_LOGI(MAIN_TAG, "HTTP GET Status = %d, content_length = %lld",
+                esp_http_client_get_status_code(client),
+                esp_http_client_get_content_length(client));
+    } else {
+        ESP_LOGE(MAIN_TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
+    }
+    ESP_LOG_BUFFER_HEX(MAIN_TAG, local_response_buffer, strlen(local_response_buffer));
 }
